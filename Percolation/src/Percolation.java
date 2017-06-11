@@ -18,7 +18,7 @@ public class Percolation {
         }
         this.n = n;
         this.nn = n*n;
-        this.wu = new WeightedQuickUnionUF(nn+2);
+        this.wu = new WeightedQuickUnionUF(nn+1);
         grid = new int[n][n];
         for(int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -35,20 +35,22 @@ public class Percolation {
         int index = this.normalize(row, col);
         grid[row-1][col-1] = 1;
         if (row == 1) {
+
             wu.union(index,0);
             if (row != n) {
                 this.unionIfOpen(row+1,col,index);
-            } else {
-                wu.union(index, nn+1);
             }
+//            else {
+//                wu.union(index, nn+1);
+//            }
         } else if (row == n) {
 //            wu.union(index, nn+1);
             this.unionIfOpen(row-1,col,index);
-            if (isFull(row, col)) wu.union(index, nn+1);
+//            if (isFull(row, col)) wu.union(index, nn+1);
         } else {
             this.unionIfOpen(row+1,col,index);
             this.unionIfOpen(row-1,col,index);
-            if (isOpen(row+1, col)) wu.union(index, nn+1);
+//            if (isOpen(row+1, col)) wu.union(index, nn+1);
         }
         if (col == 1) {
             if (col != n) this.unionIfOpen(row,col+1,index);
@@ -73,7 +75,7 @@ public class Percolation {
         return count;
     }
     public boolean percolates() {
-        return wu.connected(0,nn+1);
+        return wu.connected(0,nn);
     }
     private void throwErrorIfInputInvalid(int row, int col) {
         if (row > n || row < 1 || col > n || col < 1) {
